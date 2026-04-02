@@ -1,10 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
-*/
-
-//Vibe coded by ammaar@google.com
-
 import { GoogleGenAI } from '@google/genai';
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom/client';
@@ -103,12 +96,12 @@ function App() {
 
   // Model selection state
   const [provider, setProvider] = useState<'gemini' | 'openrouter'>(() => {
-    const saved = localStorage.getItem('flash-ui-provider');
+    const saved = localStorage.getItem('lumina-provider');
     return (saved === 'gemini' || saved === 'openrouter') ? saved : 'gemini';
   });
 
   const [modelId, setModelId] = useState<string>(() => {
-    const saved = localStorage.getItem('flash-ui-model-id');
+    const saved = localStorage.getItem('lumina-model-id');
     return saved || DEFAULT_MODELS.openrouter;
   });
 
@@ -126,8 +119,8 @@ function App() {
 
   // Save model selection to localStorage
   useEffect(() => {
-    localStorage.setItem('flash-ui-provider', provider);
-    localStorage.setItem('flash-ui-model-id', modelId);
+    localStorage.setItem('lumina-provider', provider);
+    localStorage.setItem('lumina-model-id', modelId);
   }, [provider, modelId]);
 
   useEffect(() => {
@@ -419,8 +412,8 @@ Output ONLY the complete HTML with embedded CSS. No markdown formatting.
 
             const cleanedHtml = accumulatedHtml.replace(/^```html\n?/i, '').replace(/\n?```$/i, '');
 
-            setSessions(prev => prev.map((sess, i) =>
-                i === sessions.length ? {
+            setSessions(prev => prev.map((sess) =>
+                sess.id === sessionId ? {
                     ...sess,
                     artifacts: [{
                         ...sess.artifacts[0],
@@ -431,8 +424,8 @@ Output ONLY the complete HTML with embedded CSS. No markdown formatting.
             ));
         }
 
-        setSessions(prev => prev.map((sess, i) =>
-            i === sessions.length ? {
+        setSessions(prev => prev.map((sess) =>
+            sess.id === sessionId ? {
                 ...sess,
                 artifacts: [{
                     ...sess.artifacts[0],
@@ -531,7 +524,7 @@ Return ONLY a raw JSON array of 3 *NEW*, creative names for these directions (e.
         const generateArtifact = async (artifact: Artifact, styleInstruction: string) => {
             try {
                 const prompt = `
-You are Flash UI. Create a stunning, high-fidelity UI component for: "${trimmedInput}".
+You are LUMINA, a master UI/UX designer and creative technologist. Create a stunning, high-fidelity UI component for: "${trimmedInput}".
 
 **CONCEPTUAL DIRECTION: ${styleInstruction}**
 
@@ -652,9 +645,23 @@ Return ONLY RAW HTML. No markdown fences.
 
   return (
     <>
-        <a href="https://x.com/ammaar" target="_blank" rel="noreferrer" className={`creator-credit ${hasStarted ? 'hide-on-mobile' : ''}`}>
-            created by @ammaar
-        </a>
+        <div className={`top-bar ${hasStarted ? 'hide-on-mobile' : ''}`}>
+            <a href="/" className="brand-logo" aria-label="LUMINA AI Home">
+                <svg className="brand-logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="#7c3aed"/>
+                            <stop offset="100%" stopColor="#06b6d4"/>
+                        </linearGradient>
+                    </defs>
+                    <polygon points="16,2 28,9 28,23 16,30 4,23 4,9" fill="url(#lg1)"/>
+                    <polygon points="16,8 22,11.5 22,18.5 16,22 10,18.5 10,11.5" fill="#050508" opacity="0.75"/>
+                    <circle cx="16" cy="15" r="3" fill="url(#lg1)"/>
+                </svg>
+                <span className="brand-logo-text">LUMINA AI</span>
+            </a>
+            <span className="top-bar-tagline">Where imagination becomes interface</span>
+        </div>
 
         <SideDrawer 
             isOpen={drawerState.isOpen} 
@@ -698,10 +705,23 @@ Return ONLY RAW HTML. No markdown fences.
             <div className={`stage-container ${focusedArtifactIndex !== null ? 'mode-focus' : 'mode-split'}`}>
                  <div className={`empty-state ${hasStarted ? 'fade-out' : ''}`}>
                      <div className="empty-content">
-                         <h1>Flash UI</h1>
-                         <p>Creative UI generation in a flash</p>
+                         <div className="hero-logo">
+                             <svg className="hero-logo-icon" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                 <defs>
+                                     <linearGradient id="hlg" x1="0%" y1="0%" x2="100%" y2="100%">
+                                         <stop offset="0%" stopColor="#7c3aed"/>
+                                         <stop offset="100%" stopColor="#06b6d4"/>
+                                     </linearGradient>
+                                 </defs>
+                                 <polygon points="26,3 46,14.5 46,37.5 26,49 6,37.5 6,14.5" fill="url(#hlg)"/>
+                                 <polygon points="26,13 36,18.8 36,30.2 26,36 16,30.2 16,18.8" fill="#050508" opacity="0.72"/>
+                                 <circle cx="26" cy="24.5" r="5" fill="url(#hlg)"/>
+                             </svg>
+                         </div>
+                         <h1>LUMINA AI</h1>
+                         <p>Generate stunning UI components and complete designs — powered by the world's best AI models.</p>
                          <button className="surprise-button" onClick={handleSurpriseMe} disabled={isLoading}>
-                             <SparklesIcon /> Surprise Me
+                             <SparklesIcon /> Inspire Me
                          </button>
                      </div>
                  </div>
