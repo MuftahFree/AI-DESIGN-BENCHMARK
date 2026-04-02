@@ -1,14 +1,10 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
-*/
-
 export const INITIAL_PLACEHOLDERS = [
-    "Design a minimalist weather card",
-    "Show me a live stock ticker",
-    "Create a futuristic login form",
-    "Build a stock portfolio dashboard",
-    "Make a brutalist music player",
-    "Generate a sleek pricing table",
-    "Ask for anything"
+    "Design a bioluminescent data dashboard",
+    "Create a holographic music visualizer",
+    "Build a neon-noir authentication screen",
+    "Generate a glassmorphic pricing page",
+    "Make a kinetic typography hero section",
+    "Design a crystalline weather card",
+    "Create a morphing gradient portfolio",
+    "Build a retro-futurist checkout flow"
 ];
