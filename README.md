@@ -35,12 +35,20 @@ npm install
 
 ### Environment Variables
 
-Create a `.env.local` file in the project root:
+Copy the example file and fill in your keys:
+
+```bash
+cp .env.example .env
+```
+
+Then edit `.env`:
 
 ```
 GEMINI_API_KEY=your_gemini_api_key_here
 OPENROUTER_API_KEY=your_openrouter_api_key_here
 ```
+
+> **Security**: Never commit `.env` to version control. The `.gitignore` is configured to exclude all `.env*` files (except `.env.example`).
 
 ### Run Development Server
 
@@ -61,6 +69,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ### 2. Describe Your Component
 
 Enter a design prompt such as:
+
 - *"A bioluminescent data dashboard"*
 - *"Holographic music visualizer"*
 - *"Neon-noir authentication screen"*
@@ -95,9 +104,11 @@ AI-DESIGN-BENCHMARK/
 ## 🤖 Supported Models
 
 ### Google Gemini
+
 - **gemini-3-flash-preview** — Fast, highly creative UI generation
 
 ### OpenRouter (Examples)
+
 - `anthropic/claude-3.5-sonnet` — Claude 3.5 Sonnet
 - `openai/gpt-4o` — GPT-4o
 - `z-ai/glm-4.7` — GLM-4.7 with reasoning
@@ -111,6 +122,15 @@ AI-DESIGN-BENCHMARK/
 **Colors**: Deep dark `#050508` background, purple `#7c3aed` → cyan `#06b6d4` accent gradient  
 **Typography**: Space Grotesk (display) · Inter (body) · JetBrains Mono (code)  
 **Logo**: Hexagonal prism mark with gradient fill
+
+## ⚠️ Security Considerations
+
+This application calls AI APIs **directly from the browser**. Vite's `define` config inlines API keys into the client-side JavaScript bundle at build time. This means:
+
+- **Development** is fine — keys stay on your machine.
+- **Production builds** will embed keys in the shipped JS — anyone with browser DevTools can extract them.
+
+If you plan to deploy publicly, consider adding a lightweight backend proxy (e.g. a Vite middleware, Cloudflare Worker, or serverless function) that keeps the keys server-side and forwards requests to the AI APIs.
 
 ## 🔧 Tech Stack
 
@@ -131,4 +151,3 @@ npm run preview   # Preview production build locally
 ## 📄 License
 
 Apache 2.0
-
