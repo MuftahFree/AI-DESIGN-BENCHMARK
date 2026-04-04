@@ -1,0 +1,12 @@
+.git
+.github
+.gitignore
+.env
+.env.*
+node_modules
+!dist/**
+README.md
+codebase-flow.svg
+.hintrc
+.vscode
+.idea
