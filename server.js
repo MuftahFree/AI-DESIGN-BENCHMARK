@@ -10,6 +10,9 @@ const app = express();
 const PORT = parseInt(process.env.PORT || '8080', 10);
 const DIST_DIR = path.join(__dirname, 'dist');
 
+// Trust first proxy (App Engine load balancer) so rate limiting uses real client IP
+app.set('trust proxy', 1);
+
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -22,12 +25,27 @@ app.use(limiter);
 // Serve static assets from the Vite build output
 app.use(express.static(DIST_DIR));
 
-// SPA fallback — serve index.html for all non-file routes
-app.get('*', (_req, res) => {
+// SPA fallback — serve index.html only for HTML navigation routes
+app.get('*', (req, res, next) => {
+  const hasFileExtension = path.extname(req.path) !== '';
+  const acceptsHtml = req.accepts('html');
+
+  if (hasFileExtension || !acceptsHtml) {
+    return next();
+  }
+
   res.sendFile(path.join(DIST_DIR, 'index.html'), (err) => {
-    if (err) {
-      res.status(500).send('Internal Server Error');
+    if (!err) {
+      return;
     }
+    if (res.headersSent) {
+      return;
+    }
+
+    const statusCode = err.statusCode || (err.code === 'ENOENT' ? 404 : 500);
+    const message = statusCode === 404 ? 'Not Found' : 'Internal Server Error';
+
+    res.status(statusCode).send(message);
   });
 });
 
