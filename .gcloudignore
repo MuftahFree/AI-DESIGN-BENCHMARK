@@ -4,9 +4,6 @@
 .env
 .env.*
 node_modules
-src
-*.ts
-*.tsx
 !dist/**
 README.md
 codebase-flow.svg
